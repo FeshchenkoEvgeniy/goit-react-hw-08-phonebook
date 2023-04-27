@@ -1,8 +1,8 @@
 import { ListItem, Button } from './ContactList.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdAccountCircle, MdDeleteForever } from 'react-icons/md';
-import { selectFilterContacts, selectIsLoading } from '../../redux/selectors';
-import { deleteContact } from '../../redux/operation';
+import { selectFilterContacts, selectIsLoading } from '../../redux/contacts/selectors';
+import { deleteContact } from '../../redux/contacts/operation';
 
 export const ContactList = () => {
   const dispatch = useDispatch();

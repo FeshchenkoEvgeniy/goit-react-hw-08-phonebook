@@ -4,22 +4,26 @@ import { ContactList } from './ContactsList/ContactList';
 import { Container } from './App.styled';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchContacts } from '../redux/operation';
+import { fetchContacts } from '../redux/contacts/operation';
+import { RegisterForm } from './RegisterForm/RegisterForm';
+import { LoginForm } from './LoginForm/LoginForm';
 
 export default function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchContacts());
+  // }, [dispatch]);
 
   return (
     <Container>
-      <h1>Phonebook</h1>
+      <RegisterForm/>
+      <LoginForm/>
+      {/* <h1>Phonebook</h1>
       <ContactForm />
       <h2>Contacts</h2>
       <Filter />
-      <ContactList />
+      <ContactList /> */}
     </Container>
   );
 }
