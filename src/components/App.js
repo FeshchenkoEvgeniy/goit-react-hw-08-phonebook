@@ -1,29 +1,50 @@
-import ContactForm from './ContactsForm/ContactForm';
-import Filter from './Filter/Filter';
-import { ContactList } from './ContactsList/ContactList';
-import { Container } from './App.styled';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchContacts } from '../redux/contacts/operation';
-import { RegisterForm } from './RegisterForm/RegisterForm';
-import { LoginForm } from './LoginForm/LoginForm';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { Layout } from './Layout';
+import { PrivateRoute } from './PrivateRoute';
+import { RestrictedRoute } from './RestrictedRoute';
+import { refreshUser } from '../redux/auth/operation';
+import { useAuth } from '../hooks/useAuth';
+import { Home } from '../pages/Home';
+import { Register } from '../pages/Register';
+import { Login } from '../pages/Login';
+import { Contacts } from '../pages/Contacts';
 
-export default function App() {
+export const App = () => {
   const dispatch = useDispatch();
+  const { isRefreshing } = useAuth();
 
-  // useEffect(() => {
-  //   dispatch(fetchContacts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
 
-  return (
-    <Container>
-      <RegisterForm/>
-      <LoginForm/>
-      {/* <h1>Phonebook</h1>
-      <ContactForm />
-      <h2>Contacts</h2>
-      <Filter />
-      <ContactList /> */}
-    </Container>
+  return isRefreshing ? (
+    <b>Refreshing user...</b>
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<Register />} />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<Login />} />
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute redirectTo="/login" component={<Contacts />} />
+          }
+        />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace={true} />} />
+    </Routes>
   );
-}
+};
